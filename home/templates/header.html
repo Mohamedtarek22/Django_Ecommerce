@@ -1,0 +1,245 @@
+{% load static %}
+
+<header id="header">
+      <div class="header-top">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6">
+              <ul class="header-top-left">
+                <li class="language dropdown"> <span class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button"> <img src="{%  static 'images/English-icon.gif' %}" alt="img"> English <span class="caret"></span> </span>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#"><img src="{%  static 'images/English-icon.gif' %}" alt="img"> English</a></li>
+
+                  </ul>
+                </li>
+                <li class="currency dropdown"> <span class="dropdown-toggle" id="dropdownMenu12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button"> EGP <span class="caret"></span> </span>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu12">
+                    <li><a href="#">EGP</a></li>
+
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div class="col-sm-6">
+              <ul class="header-top-right text-right">
+                  {% if user.id is not None%}
+                <li class="account"><a href="/">{{ user.first_name }}</a></li>
+                      <li class="sitemap"><a href="/logout">Logout</a></li>
+                      {% else %}
+                      <li class="account"><a href="/login">My Account</a></li>
+                    {% endif %}
+{#                <li class="sitemap"><a href="#">Sitemap</a></li>#}
+                {% if user.id is not None%}
+                <li class="cart"><a href="/shopcart/">My Cart</a></li>
+                  {% else %}
+                        <li> <a href="/login">My Cart</a></li>
+                   {% endif %}
+              </ul>
+            </div>
+          </div>
+        {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{message.tags}}" role="alert">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+        </div>
+      </div>
+      <div class="header">
+        <div class="container">
+          <nav class="navbar">
+            <div class="navbar-header mtb_20"> <a class="navbar-brand" href="/"> <img alt="HealthCared" src="{%  static 'images/logo.png' %}"> </a> </div>
+            <div class="header-right pull-right mtb_50">
+              <button class="navbar-toggle pull-left" type="button" data-toggle="collapse" data-target=".js-navbar-collapse"> <span class="i-bar">
+                  <i class="fa fa-bars"></i></span></button>
+              <div class="shopping-icon">
+                  {% if user.id is not None%}
+                <div class="cart-item " data-target="#cart-dropdown" data-toggle="collapse" aria-expanded="true" role="button">
+{#                    <a href="/shopcart/"></a>#}
+                        {% load myapptags %}
+                        {% shopcartcount user.id as count %}
+                    <a href="/shopcart/">Item's : <span class="cart-qty">{{count}}</span></a>
+
+                </div>
+                  {% else %}
+                    <div class="cart-item " data-target="#cart-dropdown" data-toggle="collapse" aria-expanded="true" role="button">
+{#                    <a href="/shopcart/"></a>#}
+
+                    <a href="/login">Item's : <span class="cart-qty">0</span></a>
+
+                </div>
+                  {% endif %}
+              </div>
+              <div class="main-search pull-right">
+                <div class="search-overlay">
+                  <!-- Close Icon -->
+                  <a href="javascript:void(0)" class="search-overlay-close"></a>
+                  <!-- End Close Icon -->
+                  <script>
+
+                              $(function() {
+                                $("#query").autocomplete({
+                                  source: "/search_auto/",
+                                  select: function (event, ui) { //item selected
+                                    AutoCompleteSelectHandler(event, ui)
+                                  },
+                                  minLength: 2,
+                                });
+                              });
+
+                              function AutoCompleteSelectHandler(event, ui)
+                              {
+                                var selectedObj = ui.item;
+                              }
+
+                            </script>
+                    <div class="container">
+                    <!-- Search Form -->
+
+                    <form role="search" id="searchform" action="/search/" method="post">
+                        {% csrf_token %}
+                      <label class="h5 normal search-input-label">Enter keywords To Search Entire Store</label>
+                      <input id="query" name="query" placeholder="Search here..." type="search">
+                      <button type="submit"></button>
+                    </form>
+                    <!-- End Search Form -->
+                  </div>
+                </div>
+                <div class="header-search"> <a id="search-overlay-btn"></a> </div>
+              </div>
+            </div>
+            <div class="collapse navbar-collapse js-navbar-collapse pull-right">
+              <ul id="menu" class="nav navbar-nav">
+                <li> <a href="/">Home</a></li>
+                <li> <a href="/product">Shop</a></li>
+{#                <li> <a href="blog_page.html">Blog</a></li>#}
+{#                <li class="dropdown mega-dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Collection </a>#}
+{#                  <ul class="dropdown-menu mega-dropdown-menu row">#}
+{#                    <li class="col-md-3">#}
+{#                      <ul>#}
+{#                        <li class="dropdown-header">Women's</li>#}
+{#                        <li><a href="#">Unique Features</a></li>#}
+{#                        <li><a href="#">Image Responsive</a></li>#}
+{#                        <li><a href="#">Auto Carousel</a></li>#}
+{#                        <li><a href="#">Newsletter Form</a></li>#}
+{#                        <li><a href="#">Four columns</a></li>#}
+{#                        <li><a href="#">Four columns</a></li>#}
+{#                        <li><a href="#">Good Typography</a></li>#}
+{#                      </ul>#}
+{#                    </li>#}
+{#                    <li class="col-md-3">#}
+{#                      <ul>#}
+{#                        <li class="dropdown-header">Man's</li>#}
+{#                        <li><a href="#">Unique Features</a></li>#}
+{#                        <li><a href="#">Image Responsive</a></li>#}
+{#                        <li><a href="#">Four columns</a></li>#}
+{#                        <li><a href="#">Auto Carousel</a></li>#}
+{#                        <li><a href="#">Newsletter Form</a></li>#}
+{#                        <li><a href="#">Four columns</a></li>#}
+{#                        <li><a href="#">Good Typography</a></li>#}
+{#                      </ul>#}
+{#                    </li>#}
+{#                    <li class="col-md-3">#}
+{#                      <ul>#}
+{#                        <li class="dropdown-header">Children's</li>#}
+{#                        <li><a href="#">Unique Features</a></li>#}
+{#                        <li><a href="#">Four columns</a></li>#}
+{#                        <li><a href="#">Image Responsive</a></li>#}
+{#                        <li><a href="#">Auto Carousel</a></li>#}
+{#                        <li><a href="#">Newsletter Form</a></li>#}
+{#                        <li><a href="#">Four columns</a></li>#}
+{#                        <li><a href="#">Good Typography</a></li>#}
+{#                      </ul>#}
+{#                    </li>#}
+{#                    <li class="col-md-3">#}
+{#                      <ul>#}
+{#                        <li id="myCarousel" class="carousel slide" data-ride="carousel">#}
+{#                          <div class="carousel-inner">#}
+{#                            <div class="item active"> <a href="#"><img src="{%  static 'images/menu-banner1.jpg" class="img-responsive" alt="Banner1' %}"></a></div>#}
+{#                            <!-- End Item -->#}
+{#                            <div class="item"> <a href="#"><img src="{%  static 'images/menu-banner2.jpg" class="img-responsive" alt="Banner1' %}"></a></div>#}
+{#                            <!-- End Item -->#}
+{#                            <div class="item"> <a href="#"><img src="{%  static 'images/menu-banner3.jpg" class="img-responsive" alt="Banner1' %}"></a></div>#}
+{#                            <!-- End Item -->#}
+{#                          </div>#}
+{#                          <!-- End Carousel Inner -->#}
+{#                        </li>#}
+{#                        <!-- /.carousel -->#}
+{#                      </ul>#}
+{#                    </li>#}
+{#                  </ul>#}
+                </li>
+                <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages </a>
+                  <ul class="dropdown-menu">
+                    <li> <a href="/contact">Contact us</a></li>
+                  {% if user.id is not None%}
+                    <li> <a href="/shopcart/">Cart</a></li>
+                  {% else %}
+                        <li> <a href="/login">Cart</a></li>
+                   {% endif %}
+                      {% if user.id is not None%}
+                         <li><a href="/">My Account</a></li>
+                      {% else %}
+                         <li><a href="/login">My Account</a></li>
+                      {% endif %}
+
+{#              <li><a href="#">My Orders</a></li>#}
+{#              <li><a href="#">My Credit Slips</a></li>#}
+{#              <li><a href="#">My Addresses</a></li>#}
+              <li><a href="/user">My Personal Info</a></li>
+
+
+                  </ul>
+                </li>
+                <li> <a href="/about">About us</a></li>
+              </ul>
+            </div>
+            <!-- /.nav-collapse -->
+          </nav>
+        </div>
+      </div>
+      <div class="header-bottom">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4 col-md-4 col-lg-3">
+              <div class="category">
+                <div class="menu-bar" data-target="#category-menu,#category-menu-responsive" data-toggle="collapse" aria-expanded="true" role="button">
+                  <h4 class="category_text">Top category</h4>
+                  <span class="i-bar"><i class="fa fa-bars"></i></span></div>
+              </div>
+              <div id="category-menu-responsive" class="navbar collapse " aria-expanded="true" style="" role="button">
+                <div class="nav-responsive">
+                  <ul class="nav  main-navigation collapse in">
+                    <li><a href="#">Pharmacy</a></li>
+                    <li><a href="#">Health</a></li>
+                    <li><a href="#">Beauty</a></li>
+                    <li><a href="#">Vitamins</a></li>
+                    <li><a href="#">Sweating</a></li>
+                    <li><a href="#">Coughs & Colds</a></li>
+                    <li><a href="#">Hair Loss</a></li>
+                    <li><a href="#">Weight Loss</a></li>
+                    <li><a href="#">Antifungals</a></li>
+                    <li><a href="#">Pain Relief</a></li>
+                    <li><a href="#">Stop Smoking</a></li>
+                    <li><a href="#">Skin Conditions</a></li>
+                    <li><a href="#">Top Brands</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-8 col-md-8 col-lg-9">
+              <div class="header-bottom-right offers">
+              	<div class="marquee"><span><i class="fa fa-circle" aria-hidden="true"></i>It's Sexual Health Week!</span>
+                  <span><i class="fa fa-circle" aria-hidden="true"></i>Our 5 Tips for a Healthy Summer</span>
+                  <span><i class="fa fa-circle" aria-hidden="true"></i>Sugar health at risk?</span>
+                  <span><i class="fa fa-circle" aria-hidden="true"></i>The Olay Ranges - What do they do?</span>
+                  <span><i class="fa fa-circle" aria-hidden="true"></i>Body fat - what is it and why do we need it?</span>
+                  <span><i class="fa fa-circle" aria-hidden="true"></i>Can a pillow help you to lose weight?</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>

@@ -1,0 +1,85 @@
+{% extends 'homebase.html' %}
+{% block title %}User Login|{{ setting.title }}{% endblock %}
+{% block description %}{{ setting.description }}{% endblock %}
+{% block keywords %}{[setting.keywords}}{% endblock %}
+ {% load mptt_tags %}
+{% load mptt_tags %}
+{% load static %}
+{% block body %}
+    <<div id="breadcrumb ptb_20">
+        <div class="container">
+            <ul class="breadcrumb ptb_20">
+                <li><a href="/">Home</a></li>
+                <li class="active">User Profile</li>
+            </ul>
+        </div>
+    </div>
+    <!-- /BREADCRUMB -->
+
+    <!-- section -->
+    <div class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+
+                <div class="col-md-9">
+                    <div class="billing-details">
+                        <div class="section-title">
+                            <h3 class="title">User Profile Inf.</h3>
+                        </div>
+                    </div>
+{#                    <div>#}
+{#                         <a href="/user/update" class="btn btn-primary">Update Profile</a>#}
+{#                    </div>#}
+
+                     <table class="table">
+                        <tr>
+                            <th class="row">
+
+{#                                <a href="/user/password" class="btn btn-secondary">Change Password</a>#}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="row">Name Surname</th>
+                            <td>{{ user.first_name}} {{ user.last_name}} </td>
+                        </tr>
+                        <tr>
+                            <th class="row">Email</th>
+                            <td >{{ profile.user.email}}</td>
+                        </tr>
+                        <tr>
+                            <th class="row">Phone</th>
+                            <td>{{ profile.phone}}</td>
+                        </tr>
+                        <tr>
+                            <th class="row">Addres</th>
+                            <td>{{ profile.address}}</td>
+                        </tr>
+                        <tr>
+                            <th class="row">City</th>
+                            <td>{{ profile.city}}</td>
+                        </tr>
+                        <tr>
+                            <th class="row">Country</th>
+                            <td>{{ profile.country}}</td>
+                        </tr>
+
+
+                    </table>
+                </div>
+
+
+
+            </div>
+
+                <div>
+                        <a href="/user/update" class="btn btn-primary">Update Profile</a>
+
+                    </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /section -->
+{% endblock %}

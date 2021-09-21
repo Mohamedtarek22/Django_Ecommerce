@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- =====  BASIC PAGE NEEDS  ===== -->
+  <meta charset="utf-8">
+  <title>{% block title %}HealthCare{%endblock %}</title>
+  <!-- =====  SEO MATE  ===== -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="">
+  <meta name="keywords" content="{% block keywords %} Home Keywords {% endblock %}">
+  <meta name="distribution" content="{% block description %} Home description  {% endblock %}">
+  <meta name="revisit-after" content="2 Days">
+  <meta name="robots" content="ALL">
+  <meta name="rating" content="8 YEARS">
+  <meta name="Language" content="en-us">
+  <meta name="GOOGLEBOT" content="NOARCHIVE">
+  <!-- =====  MOBILE SPECIFICATION  ===== -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width">
+  <!-- =====  CSS  ===== -->
+{% load static %}
+
+  <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css'%}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css'%}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css'%}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/magnific-popup.css'%}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/owl.carousel.css'%}">
+  <link rel="shortcut icon" href="{% static 'images/favicon.png'%}">
+  <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png'%}">
+  <link rel="apple-touch-icon" sizes="72x72" href="{% static 'images/apple-touch-icon-72x72.png'%}">
+  <link rel="apple-touch-icon" sizes="114x114" href="{% static 'images/apple-touch-icon-114x114.png'%}">
+  <script src="{% static 'js/jQuery_v3.1.1.min.js'%}"></script>
+  <script src="{% static 'js/owl.carousel.min.js'%}"></script>
+  <script src="{% static 'js/bootstrap.min.js'%}"></script>
+  <script src="{% static 'js/jquery.magnific-popup.js'%}"></script>
+  <script src="{% static 'js/jquery.firstVisitPopup.js'%}"></script>
+  <script src="{% static 'js/custom.js'%}"></script>
+<!-- jQuery UI !-->
+
+{% block head %} {% endblock %}
+</head>
+<body>
+{% include 'header.html' %}
+<div class="container">
+{% block sidebar %} {% endblock %}
+{% block body %} {% endblock %}
+</div>
+{% include 'footer.html' %}
+
+</body>
+</html>

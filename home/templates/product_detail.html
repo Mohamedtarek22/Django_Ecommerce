@@ -1,0 +1,230 @@
+{% extends 'homebase.html' %}
+{% block title %}{{ product.title }}{% endblock %}
+{% block description %}{{ setting.description }}{% endblock %}
+{% block keywords %}{[setting.keywords}}{% endblock %}
+ {% load mptt_tags %}
+{% load mptt_tags %}
+{% load static %}
+{% block body %}
+<div class="container">
+      <div class="row ">
+        <div id="column-left" class="col-sm-4 col-md-4 col-lg-3 hidden-xs">
+          <div id="category-menu" class="navbar collapse in  mb_40" aria-expanded="true" style="" role="button">
+            <div class="nav-responsive">
+             <ul class="nav  main-navigation collapse in ">
+                      {% recursetree category %}
+                <li><a href="/category/{{node.id }}/{{ node.slug }}">{{ node.title }}</a></li>
+                {% endrecursetree %}
+              </ul>
+            </div>
+          </div>
+          <div class="left_banner left-sidebar-widget mt_30 mb_40"> <a href="#"><img src="images/left1.jpg" alt="Left Banner" class="img-responsive" /></a> </div>
+           <div class="left-special left-sidebar-widget mb_50">
+            <div class="heading-part mb_20 ">
+              <h2 class="main_title">Top Products</h2>
+            </div>
+            <div id="left-special" class="owl-carousel">
+              <ul class="row ">
+               {%for product in products_slider %}
+            <li class="item product-layout-left mb_20">
+
+              <div class="product-list col-xs-4">
+                <div class="product-thumb">
+
+                <div class="image product-imageblock"><img data-name="product_image" src="{{ product.image.url }}" alt="iPod Classic" title="iPod Classic" class="img-responsive"> </div>
+
+                </div>
+              </div>
+              <div class="col-xs-8">
+                <div class="caption product-detail">
+                  <h6 class="product-name"><a href="product/{{ rs.id }}/{{rs.slug}}">{{product.title}}</a></h6>
+                  <span class="price"><span class="amount"><span class="currencySymbol">EG</span>{{product.price}}</span>
+                  </span>
+                </div>
+              </div>
+            </li>
+            {%endfor%}
+
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-8 col-md-8 col-lg-9 mtb_30">
+          <!-- =====  BANNER STRAT  ===== -->
+          <div class="breadcrumb ptb_20">
+            <h1>New LCDScreen...</h1>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/category/{{ product.category.id }}/{{ product.category.slug }}">{{ product.category.title }}</a></li>
+              <li class="active">{{ product.title }}</li>
+            </ul>
+          </div>
+          <!-- =====  BREADCRUMB END===== -->
+          <div class="row mt_10 ">
+            <div class="col-md-6">
+              <div><a class="thumbnails"> <img data-name="product_image" src=" {{ product.image.url }} " alt="" /></a></div>
+              <div id="product-thumbnail" class="owl-carousel">
+                <div class="item">
+                  <div class="image-additional"><a class="thumbnail" href="{{ product.image.url }}" data-fancybox="group1"> <img src="{{ product.image.url }}" alt="" /></a></div>
+                </div>
+                  {% for rs in images %}
+                <div class="item">
+                  <div class="image-additional"><a class="thumbnail" href="{{ rs.image.url }}" data-fancybox="group1"> <img src="{{ rs.image.url }}" alt="" /></a></div>
+                </div>
+                    {% endfor %}
+              </div>
+            </div>
+            <div class="col-md-6 prodetail caption product-thumb">
+              <h4 data-name="product_name" class="product-name"><a href="#" title="Casual Shirt With Ruffle Hem">{{ product.title }}</a></h4>
+              <div class="rating">
+                <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span>
+                <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span>
+                <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span>
+                <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span>
+                <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-x"></i></span>
+              </div>
+              <span class="price mb_20"><span class="amount"><span class="currencySymbol">EG</span>{{ product.price }}</span>
+              </span>
+              <hr>
+              <ul class="list-unstyled product_info mtb_20">
+
+                  <label>Availability:</label>
+                  <span> In Stock</span></li>
+              </ul>
+              <hr>
+              <p class="product-desc mtb_30">{{ product.description }} </p>
+              <div id="product">
+                <div class="form-group">
+                  <div class="row">
+                    <div class="Sort-by col-md-6">
+                      <label>Sort by</label>
+                      <select name="product_size" id="select-by-size" class="selectpicker form-control">
+                        <option>Small</option>
+                        <option>Medium</option>
+                        <option>Large</option>
+                      </select>
+                    </div>
+                    <div class="Color col-md-6">
+                      <label>Color</label>
+                      <select name="product_color" id="select-by-color" class="selectpicker form-control">
+                        <option>Blue</option>
+                        <option>Green</option>
+                        <option>Orange</option>
+                        <option>White</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                  <form action="/order/addtoshopcart/{{ product.id }}" method="post">
+                       {% csrf_token %}
+                        <div class="qty mt_30 form-group2">
+                          <label>Qty</label>
+                          <input name="quantity" min="1" value="1" type="number" max="{{ product.amount }}">
+                        </div>
+                        <div class="button-group mt_30">
+                          <div ><a href="/order/addtoshopcart/{{ product.id }}"  class="primary-btn add-to-cart"></a></div>
+                        </div>
+                      </form>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div id="exTab5" class="mtb_30">
+                <ul class="nav nav-tabs">
+                  <li class="active"> <a href="#1c" data-toggle="tab">Overview</a> </li>
+                  <li><a href="#2c" data-toggle="tab">Reviews (1)</a> </li>
+                </ul>
+                <div class="tab-content mt_20">
+                  <div class="tab-pane active" id="1c">
+                    <p>{{ product.detail|safe }}</p>
+                  </div>
+                  <div class="tab-pane" id="2c">
+                                {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{message.tags}}" role="alert">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+                    <form class="form-horizontal" method="post" action="/product/addcomment/{{ product.id }}">
+                        {% csrf_token %}
+                        <div id="review"></div>
+                      <h4 class="mt_20 mb_30">Write a review</h4>
+                      <div class="form-group required">
+                        <div class="col-sm-12">
+                          <label class="control-label" for="input-name">Subject</label>
+                          <input name="subject" value="" id="input-name" class="form-control" type="text">
+                        </div>
+                      </div>
+                      <div class="form-group required">
+                        <div class="col-sm-12">
+                          <label class="control-label" for="input-review">Your Review</label>
+                          <textarea name="comment" rows="5" id="input-review" class="form-control"></textarea>
+                          <div class="help-block"><span class="text-danger">Note:</span> HTML is not translated!</div>
+                        </div>
+                      </div>
+                      <div class="form-group required">
+                        <div class="col-md-6">
+                          <label class="control-label">Rating</label>
+                          <div class="rates"><span>Bad</span>
+                            <input name="rate" value="1" type="radio">
+                            <input name="rate" value="2" type="radio">
+                            <input name="rate" value="3" type="radio">
+                            <input name="rate" value="4" type="radio">
+                            <input name="rate" value="5" type="radio">
+                            <span>Good</span></div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="buttons pull-right">
+                              {% if user.id is not None %}
+                            <button class="btn btn-md btn-link">Continue</button>
+                                  {% else %}
+                                You must be logged in to a post a review
+                                  {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+
+
+
+                  </div>
+                  <div class="tab-pane active" id="3c">
+                    {% for rs in comments %}
+                    <p>a.sd,asld,adma.,m</p>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <div id="brand_carouse" class="ptb_30 text-center">
+        <div class="type-01">
+          <div class="heading-part mb_20 ">
+            <h2 class="main_title">Brand Logo</h2>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="brand owl-carousel ptb_20">
+                 <div class="item text-center"> <a href="#"><img src="{% static '' %}images/brand/brand1.png" alt="Disney" class="img-responsive" /></a> </div>
+                <div class="item text-center"> <a href="#"><img src="{% static '' %}images/brand/brand2.png" alt="Dell" class="img-responsive" /></a> </div>
+                <div class="item text-center"> <a href="#"><img src="{% static '' %}images/brand/brand3.png" alt="Harley" class="img-responsive" /></a> </div>
+                <div class="item text-center"> <a href="#"><img src="{% static '' %}images/brand/brand4.png" alt="Canon" class="img-responsive" /></a> </div>
+                <div class="item text-center"> <a href="#"><img src="{% static '' %}images/brand/brand5.png" alt="Canon" class="img-responsive" /></a> </div>
+                <div class="item text-center"> <a href="#"><img src="{% static '' %}images/brand/brand6.png" alt="Canon" class="img-responsive" /></a> </div>
+                <div class="item text-center"> <a href="#"><img src="{% static '' %}images/brand/brand7.png" alt="Canon" class="img-responsive" /></a> </div>
+                <div class="item text-center"> <a href="#"><img src="{% static '' %}images/brand/brand8.png" alt="Canon" class="img-responsive" /></a> </div>
+                <div class="item text-center"> <a href="#"><img src="{% static '' %}images/brand/brand9.png" alt="Canon" class="img-responsive" /></a> </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

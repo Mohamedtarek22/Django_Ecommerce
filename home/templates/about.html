@@ -1,0 +1,38 @@
+{% extends 'homebase.html' %}
+{% block title %}{{ setting.title }}{% endblock %}
+{% block description %}{{ setting.description }}{% endblock %}
+{% block keywords %}{[setting.keywords}}{% endblock %}
+ {% load mptt_tags %}
+{% load mptt_tags %}
+{% load static %}
+{% block body %}
+<div class="container">
+      <div class="row ">
+        <div id="column-left" class="col-sm-4 col-md-4 col-lg-3 hidden-xs">
+          <div id="category-menu" class="navbar collapse in  mb_40" aria-expanded="true" style="" role="button">
+            <div class="nav-responsive">
+              <ul class="nav  main-navigation collapse in ">
+                      {% recursetree category %}
+                <li><a href="/category/{{node.id }}/{{ node.slug }}">{{ node.title }}</a></li>
+                {% endrecursetree %}
+              </ul>
+            </div>
+          </div>
+          <div class="left_banner left-sidebar-widget mt_30 mb_40"> <a href="#"><img src="{% static '' %}images/left1.jpg" alt="Left Banner" class="img-responsive" /></a> </div>
+        </div>
+        <div class="col-sm-8 col-md-8 col-lg-9 mtb_30">
+          <!-- contact  -->
+          <div class="row">
+            {{ setting.aboutus|safe }}
+
+          </div>
+          <!-- map  -->
+          <div class="row">
+            <div class="col-xs-12 map mb_80">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
