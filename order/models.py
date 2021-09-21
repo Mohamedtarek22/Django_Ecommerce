@@ -25,6 +25,8 @@ class ShopCart(models.Model):
 
 
 
+
+
 class ShopCartForm(ModelForm):
     class Meta:
         model = ShopCart
