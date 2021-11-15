@@ -1,0 +1,59 @@
+{%load static%}
+<script type="text/javascript" src="{% static 'js/product-filter.js' %}"></script>
+<div class="heading-part mtb_20 ">
+    <h2 class="main_title">Refinr Search</h2>
+  </div>
+  <div class="filter-block">
+    <div class="list-group">
+    <p>
+      <input type="range" style="color: red; background-color: red;
+    
+      " value="{{minMaxPrice.price__min}}" max={{minMaxPrice.price__max}} min={{minMaxPrice.price__min}} id="rangeInput" oninput="maxPrice.value=this.value" />
+      <p>{{minMaxPrice.price__min}}-{{minMaxPrice.price__max}}</p>
+      <!-- <input min={{minMaxPrice.price__min}} max={{minMaxPrice.price__min}} type="text" id="amount" readonly> -->
+    </p>
+    <p>
+      <label for="amount">Price range:</label>
+      <input type="number" value="{{minMaxPrice.price__min}}" max={{minMaxPrice.price__max}} min={{minMaxPrice.price__min}} class="form-control" id="maxPrice" onkeyup="rangeInput.value=this.value" id="maxPrice" />
+          
+    </p>
+
+
+  </div>
+
+
+    <div>
+      <br/>
+    </div>
+    <div class="list-group">
+      <div class="list-group-item mb_10">
+        <label>Color</label>
+        <div id="filter-group1">
+          {%for i in colors%}
+          <div class="checkbox">
+            <label>
+              <input class="filter-checkbox" data-filter="color" value="{{i.color__id}}" type="checkbox" />
+              <!-- <input class="filter-checkbox" data-filter="color" value="{{i.color__id}}" type="checkbox"/> -->
+              {{i.color__title}}
+            </label>
+          </div>
+         {%endfor%}
+        </div>
+
+      </div>
+      <div class="list-group-item mb_10">
+        <label>Size</label>
+        <div id="filter-group3">
+          
+        {%for i in sizes%}
+          <div class="checkbox">
+            <label>
+              <input class="filter-checkbox" data-filter="size" value="{{i.size__id}}" type="checkbox">{{i.size__title}}</label>
+          </div>
+          {%endfor%}
+        </div>
+      </div>
+    </div>
+    <button id="priceFilterBtn" class="btn btn-info btn-sm mt-1">Filter</button>      <!-- <input min={{minMaxPrice.price__min}} max={{minMaxPrice.price__min}} type="text" id="amount" readonly> -->
+
+  </div>

@@ -1,0 +1,97 @@
+{% extends 'homebase.html' %}
+
+{% block title %}Orders{{ setting.title }}{% endblock %}
+{% block description %}{{ setting.description }}{% endblock %}
+{% block keywords %}{[setting.keywords}}{% endblock %}
+
+{% block body %}
+      <!-- BREADCRUMB -->
+      <br/>
+      <div class="breadcrumb ptb_20">
+        <h1>Orders</h1>
+        <ul>
+          <!-- <li><a href="index.html">Home</a></li> -->
+          <!-- <li class="active"></li> -->
+        </ul>
+      </div>
+    <!-- /BREADCRUMB -->
+    <main class="container my-4">
+        <!-- <h3 class="my-4 border-bottom pb-1">
+            Dashboard
+        </h3> -->
+        <div class="row">
+            <div class="col-md-3">
+    
+                <div class="table-responsive">
+                    <table class="table-bordered table">
+                        <thead>
+                            <tr>
+                                <th><a class="{%if request.path == '/my-dashboard' %}active{%endif%}" href="{%url 'my_dashboard' %}">Dashboard</a></th>
+
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th><a class="{%if request.path == '/my-orders' %}active{%endif%}" href="{%url 'my_orders' %}">Orders</a></th>
+                        
+
+                            </tr>
+                            <tr>
+                                <th><a class="{%if request.path == '/my-wishlist' %}active{%endif%}" href="{%url 'my_wishlist' %}">Wishlist</a></th>
+                            </tr>
+                            <tr>
+                                <th><a class="{%if request.path == '/my-addressbook' %}active{%endif%}" href="{%url 'my_addressbook' %}">AddressBook</a></th>
+                            </tr>
+                            <tr>
+                                <th><a class="{%if request.path == '/edit-profile' %}active{%endif%}" href="{%url 'edit-profile' %}">EditProfile</a></th>
+
+                            </tr>
+                            <tr>
+                                <th><a class="{%if request.path == 'password/' %}active{%endif%}" href="{%url 'password' %}">Password Change</a></th>
+
+                            </tr>
+                            <tr>
+                                <th><a class="text-danger" href="{%url 'logout_form'%}">Logout</a></th>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="table-responsive">
+                    <table class="table-bordered table">
+                        <thead>
+                            <tr>
+                                <th>OrderNO</th>
+                                <th>Total Amt</th>
+                                <th>Status</th>
+
+                                <th>Order Time</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            {%for order in orders%}
+                            <tr>
+                                <td><a href="{%url 'my_orders_items' order.id%}" class="btn btn-sm btn-dark">{{order.id}}</a></td>
+                                <td>{{order.total_amt}}</td>
+                                <td>{{order.paid_status}}</td>
+                                <td>{{order.order_dt}}</td>
+
+
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+
+        </div>
+    </main>
+    <!-- section -->
+    <!-- /section -->
+
+{% endblock %}
