@@ -1,4 +1,6 @@
 {% load static %}
+<script type="text/javascript" src="{%static 'js/cart.js' %}"></script>
+
 <div id="column-right" class="col-sm-8 col-md-8 col-lg-9 mtb_30">
           <!-- =====  BANNER STRAT  ===== -->
           {% include 'silder.html' %}
@@ -44,15 +46,27 @@
 
 
                       <div class="product-thumb">
-                        <div class="image product-imageblock">  <img data-name="product_image" src="{{ rs.image.url }}" alt="iPod Classic" title="iPod Classic" class="img-responsive">  </div>
+                        <div class="image product-imageblock">  <img data-name="product_image" src="{{ rs.image.url }}"  style="height: 200px;width: 200px;"alt="iPod Classic" title="iPod Classic" class="img-responsive">  </div>
                         <div class="caption product-detail text-left">
                           <h6 data-name="product_name" class="product-name mt_20"><a href="/product/{{ rs.id }}/{{rs.slug}}" title="Casual Shirt With Ruffle Hem">{{ rs.title }}</a></h6>
                           <div class="rating"> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-x"></i></span> </div>
-                          <span class="price"><span class="amount"><span class="currencySymbol">EG</span>{{ rs.price }}</span>
-                          </span>
+                          <span class="price"><span class="amount"><span class="currencySymbol">EG</span><span class="product-price-{{rs.id}}">{{rs.price}}</span></span>
+                        </span>
                           <div class="button-group text-center">
-
-                            <div ><a href="/order/addtoshopcart/{{ rs.id }}"  class="primary-btn add-to-cart"></a></div>
+                            <div class="" >
+                              <input class="product-qty-{{rs.id}}" min="1" value="1" type="hidden" max="{{ rs.minamount }}" >
+                              <input type="hidden" class="product-image-{{rs.id}}" value="{{ rs.image.url }}"/>
+                              <input type="hidden" class="product-id-{{rs.id}}" value="{{rs.id}}"/>
+                              <input type="hidden" class="product-title-{{rs.id}}" value="{{rs.title}}"/>
+                              {%if user.is_authenticated%}
+                              <a class="wishlist add-wishlist" data-product="{{rs.id}}"></a>
+                              {%else%}
+                              <a class="wishlist" href="/login"></a>
+      
+                              {%endif%}
+                              <a href="/product/{{ rs.id }}/{{rs.slug}}" class="quickview"></a>
+                            <div class="compare"><a href="#"><span>Compare</span></a></div>
+                              <a href="" data-index="{{rs.id}}" class="primary-btn add-to-cart add-cart"></a></div>
                           </div>
                         </div>
                       </div>
@@ -62,28 +76,7 @@
 
                   </div>
                 {% endfor %}
-{#                {% for rs in products_picked %}#}
-{#                  <div class="product-grid">#}
-{#                   <div class="item">#}
-{#                      <div class="product-thumb mb-30">#}
-{#                        <div class="image product-imageblock"> <img data-name="product_image" src="{{ rs.image.url }}" alt="iPod Classic" title="iPod Classic" class="img-responsive">   </div>#}
-{#                        <div class="caption product-detail text-left">#}
-{#                          <h6 data-name="product_name" class="product-name mt_20"><a href="/product/{{ rs.id }}/{{rs.slug}}" title="Casual Shirt With Ruffle Hem">{{ rs.title }}</a></h6>#}
-{#                          <div class="rating"> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-x"></i></span> </div>#}
-{#                          <span class="price"><span class="amount"><span class="currencySymbol">EG</span>{{ rs.price }}</span>#}
-{#                          </span>#}
-{#                          <div class="button-group text-center">#}
-{##}
-{#                                <div ><a href="/order/addtoshopcart/{{ rs.id }}"  class="primary-btn add-to-cart"></a></div>#}
-{#                          </div>#}
-{#                        </div>#}
-{#                      </div>#}
-{##}
-{#                    </div>#}
-{##}
-{##}
-{#                  </div>#}
-{#                {% endfor %}#}
+
                 </div>
               </div>
               <div class="tab-pane" id="Bestsellers">
@@ -94,16 +87,28 @@
 
 
                       <div class="product-thumb mb-30">
-                        <div class="image product-imageblock">  <img data-name="product_image" src="{{ rs.image.url }}" alt="iPod Classic" title="iPod Classic" class="img-responsive">  </div>
+                        <div class="image product-imageblock">  <img data-name="product_image" src="{{ rs.image.url }}" style="height: 200px;width: 200px;" alt="iPod Classic" title="iPod Classic" class="img-responsive">  </div>
                         <div class="caption product-detail text-left">
                           <h6 data-name="product_name" class="product-name mt_20"><a href="/product/{{ rs.id }}/{{rs.slug}}" title="Casual Shirt With Ruffle Hem">{{ rs.title }}</a></h6>
                           <div class="rating"> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-x"></i></span> </div>
-                          <span class="price"><span class="amount"><span class="currencySymbol">EG</span>{{ rs.price }}</span>
-                          </span>
+                          <span class="price"><span class="amount"><span class="currencySymbol">EG</span><span class="product-price-{{rs.id}}">{{rs.price}}</span></span>
+                        </span>
                           <div class="button-group text-center">
 
-                            <div class="add-to-cart"><a href="/order/addtoshopcart/{{ rs.id }}"><span>Add to cart</span></a></div>
-                          </div>
+                            <div class="" >
+                              <input class="product-qty-{{rs.id}}" min="1" value="1" type="hidden" max="{{ rs.minamount }}" >
+                              <input type="hidden" class="product-image-{{rs.id}}" value="{{ rs.image.url }}"/>
+                              <input type="hidden" class="product-id-{{rs.id}}" value="{{rs.id}}"/>
+                              <input type="hidden" class="product-title-{{rs.id}}" value="{{rs.title}}"/>
+                              {%if user.is_authenticated%}
+                        <a class="wishlist add-wishlist" data-product="{{rs.id}}"></a>
+                        {%else%}
+                        <a class="wishlist" href="/login"></a>
+
+                        {%endif%}
+                              <a href="/product/{{ rs.id }}/{{rs.slug}}" class="quickview"></a>
+                            <div class="compare"><a href="#"><span>Compare</span></a></div>
+                              <a href="" data-index="{{rs.id}}" class="primary-btn add-to-cart add-cart"></a></div>                          </div>
                         </div>
                       </div>
 
@@ -123,17 +128,32 @@
 
                       <div class="product-thumb mb-30">
 
-                            <div class="image product-imageblock">  <img data-name="product_image" src="{{ rs.image.url }}" alt="iPod Classic" title="iPod Classic" class="img-responsive">  </div>
+                            <div class="image product-imageblock">  <img data-name="product_image" style="height: 200px;width: 200px;" src="{{ rs.image.url }}" alt="iPod Classic" title="iPod Classic" class="img-responsive">  </div>
 
                           <div class="caption product-detail text-left">
                           <h6 data-name="product_name" class="product-name mt_20"><a href="/product/{{ rs.id }}/{{rs.slug}}" title="Casual Shirt With Ruffle Hem">{{ rs.title }}</a></h6>
                           <div class="rating"> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-x"></i></span> </div>
-                          <span class="price"><span class="amount"><span class="currencySymbol">EG</span>{{ rs.price }}</span>
-                          </span>
-                          <div class="button-group text-center">
+                          <span class="price"><span class="amount"><span class="">EGP</span><span class="product-price-{{rs.id}}">{{rs.price}}</span></span>
+                    </span>
+                      <p class="product-desc mt_20 mb_60">{{ rs.description }}</p>
+                    <div class="button-group text-center">
 
-                            <div class="add-to-cart"><a href="/order/addtoshopcart/{{ rs.id }}"><span>Add to cart</span></a></div>
-                          </div>
+                      <div class="" >
+                        <input class="product-qty-{{rs.id}}" min="1" value="1" type="hidden" max="{{ rs.minamount }}" >
+                        <input type="hidden" class="product-image-{{rs.id}}" value="{{ rs.image.url }}"/>
+                        <input type="hidden" class="product-id-{{rs.id}}" value="{{rs.id}}"/>
+                        <input type="hidden" class="product-title-{{rs.id}}" value="{{rs.title}}"/>
+                        {%if user.is_authenticated%}
+                        <a class="wishlist add-wishlist" data-product="{{rs.id}}"></a>
+                        {%else%}
+                        <a class="wishlist" href="/login"></a>
+
+                        {%endif%}
+                        <a href="/product/{{ rs.id }}/{{rs.slug}}" class="quickview"></a>
+                      <div class="compare"><a href="#"><span>Compare</span></a></div>
+                        <a href="" data-index="{{rs.id}}" class="primary-btn add-to-cart add-cart"></a>
+                      </div>    
+                           </div>
                         </div>
                       </div>
 

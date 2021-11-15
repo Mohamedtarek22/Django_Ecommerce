@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.deletion import CASCADE
 from django.utils.safestring import mark_safe
 from ckeditor_uploader.fields import RichTextUploadingField
 from mptt.models import MPTTModel
@@ -40,8 +41,34 @@ class Category(MPTTModel):
     #         k = k.parent
     #     return ' / '.join(full_path[::-1])
 
+class Brand(models.Model):
+    title=models.CharField(max_length=100)
 
-class Product(models.Model):
+
+    def __str__(self):
+        return self.title
+
+# Color
+class Color(models.Model):
+    title=models.CharField(max_length=100)
+
+    def color_bg(self):
+        return mark_safe('<div style="width:30px; height:30px; background-color:%s"></div>' % (self.color_code))
+
+    def __str__(self):
+        return self.title
+
+# Size
+class Size(models.Model):
+    title=models.CharField(max_length=100)
+
+
+    def __str__(self):
+        return self.title
+
+
+
+class Product(models.Model): #product attribute
     STATUS = (
         ('True', 'True'),
         ('False', 'False'),
@@ -55,6 +82,9 @@ class Product(models.Model):
     amount = models.IntegerField(default=0)
     minamount = models.IntegerField(default=3)
     detail = RichTextUploadingField()
+    brand=models.ForeignKey(Brand,on_delete=models.CASCADE)
+    color=models.ForeignKey(Color,on_delete=models.CASCADE)
+    size=models.ForeignKey(Size,on_delete=models.CASCADE)
     slug = models.SlugField(null=False, unique=True)
     status = models.CharField(max_length=10, choices=STATUS)
     create_at = models.DateTimeField(auto_now_add=True)

@@ -31,11 +31,12 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'home.apps.HomeConfig',
     'user.apps.UserConfig',
+    'home.apps.HomeConfig',
     'order.apps.OrderConfig',
     'product.apps.ProductConfig',
-
+    'jet.dashboard',
+    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,8 +47,7 @@ INSTALLED_APPS = [
     'mptt',
     'clearcache',
     "bootstrap4",
-
-
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'home.template_context.get_filters',
             ],
         },
     },
@@ -84,10 +85,11 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME':BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -156,3 +158,17 @@ CKEDITOR_CONFIGS = {
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+PAYPAL_RECEIVER_EMAIL = 'sb-c5xgx6555500@business.example.com'
+PAYPAL_TEST = True
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = '201727036@std.sci.cu.edu.eg'
+EMAIL_HOST_PASSWORD = 'oztyhoidjzgguepr'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Medical Team <201727036@std.sci.cu.edu.eg>'
+
+JET_SIDE_MENU_COMPACT= True

@@ -28,8 +28,8 @@
           <div class="col-md-2 footer-block">
             <h6 class="footer-title ptb_20">Categories</h6>
             <ul>
-                {% recursetree category %}
-                <li><a href="/category/{{node.id }}/{{ node.slug }}">{{ node.title }}</a></li>
+              {% recursetree category %}          
+                    <li><a href="/category/{{node.id }}/{{ node.slug }}">{{ node.title }}</a></li>
                 {% endrecursetree %}
             </ul>
           </div>
@@ -50,14 +50,25 @@
 {#              <li><a href="#">Checkout</a></li>#}
               {% if user.id is not None%}
                  <li><a href="/">My Account</a></li>
+                 <li><a href="{%url 'my_dashboard'%}">Dashboard</a></li>
+
               {% else %}
                 <li><a href="/login">My Account</a></li>
+                <li><a href="/login">Dashboard</a></li>
+
               {% endif %}
+
 
 {#              <li><a href="#">My Orders</a></li>#}
 {#              <li><a href="#">My Credit Slips</a></li>#}
 {#              <li><a href="#">My Addresses</a></li>#}
               <li><a href="/user">My Personal Info</a></li>
+            </ul>
+          </div>
+          <div class="col-md-2 footer-block">
+            <h6 class="footer-title ptb_20">Get to Know Us</h6>
+            <ul>
+              <li><a href="/about">About Us</a></li>
             </ul>
           </div>
           <div class="col-md-3">

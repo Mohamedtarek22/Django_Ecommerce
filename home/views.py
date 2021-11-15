@@ -10,7 +10,7 @@ from home.forms import SearchForm
 from home.models import Setting, ContactForm, ContactMessage
 from order.models import ShopCart
 from product.models import Category, Product, Images, Comment
-
+from django.template.loader import render_to_string
 
 def index(request):
     setting= Setting.objects.get(pk=1)
@@ -27,7 +27,9 @@ def index(request):
 def shopcartcount(userid):
     count = ShopCart.objects.filter(user_id=userid).count()
     return count
-
+# def shopcartcount2():
+#     count = ShopCart.objects.all().count()
+#     return count
 
 def aboutus(request):
     setting = Setting.objects.get(pk=1)
@@ -57,17 +59,6 @@ def contactus(request):
     context = {'setting': setting,'form':form,'category':category}
     return render(request, 'contact.html', context)
 
-def category_products(request,id,slug):
-    # products = Product.objects.all()
-    products = Product.objects.filter(category_id=id)
-    # products2=Product.objects.all()
-    category=Category.objects.all()
-    products_slider = Product.objects.all().order_by('id')[:4]
-    context ={'category':category,'products': products,'products_slider':products_slider}
-
-    return render(request,'category_products.html',context)
-
-
 def search(request):
     if request.method == 'POST': # check post
         form = SearchForm(request.POST)
@@ -82,6 +73,16 @@ def search(request):
             return render(request, 'search_products.html', context)
 
     return HttpResponseRedirect('/')
+
+def category_products(request,id,slug):
+    # products = Product.objects.all()
+    data = Product.objects.filter(category_id=id)
+    # products2=Product.objects.all()
+    category=Category.objects.all()
+    products_slider = Product.objects.all().order_by('id')[:4]
+    context ={'category':category,'data': data,'products_slider':products_slider}
+
+    return render(request,'category_products.html',context)
 
 def search_auto(request):
     if request.is_ajax():
@@ -103,7 +104,7 @@ def product_detail(request,id,slug):
     category = Category.objects.all()
     product = Product.objects.get(pk=id)
     images = Images.objects.filter(product_id=id)
-    products_slider = Product.objects.all().order_by('id')[:4]
+    products_slider = Product.objects.all().order_by('id')[:4]  
     comments= Comment.objects.filter(product_id=id,status='True')
     context = {'product': product, 'category': category,
                'images': images,'comments': comments,
@@ -111,3 +112,20 @@ def product_detail(request,id,slug):
                }
     return render(request, 'product_detail.html', context)
 
+
+def filter_data(request):
+    colors=request.GET.getlist('color[]')
+    sizes=request.GET.getlist('size[]')
+    allProducts=Product.objects.all().distinct()
+    minPrice=request.GET['minPrice']
+    maxPrice=request.GET['maxPrice']
+    allProducts=allProducts.filter(price__gte=minPrice)
+    allProducts=allProducts.filter(price__lte=maxPrice)
+
+
+    if len(colors)>0:
+        allProducts=allProducts.filter(color__id__in=colors).distinct().order_by('id')
+    if len(sizes)>0:
+	    allProducts=allProducts.filter(size__id__in=sizes).distinct().order_by('id')
+    t= render_to_string('ajax/category_products.html',{'data':allProducts})
+    return JsonResponse({'data':t})

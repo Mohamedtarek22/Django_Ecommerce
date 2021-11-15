@@ -1,10 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.forms import ModelForm
-
+from django.utils.html import mark_safe
 # Create your models here.
 from product.models import Product
-
 
 class ShopCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -83,3 +82,36 @@ class OrderProduct(models.Model):
 
     def __str__(self):
         return self.product.title
+
+# Order
+status_choice=(
+        ('process','In Process'),
+        ('shipped','Shipped'),
+        ('delivered','Delivered'),
+    )
+class CartOrder(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    total_amt=models.FloatField()
+    paid_status=models.BooleanField(default=False)
+    order_dt=models.DateTimeField(auto_now_add=True)
+    order_status=models.CharField(choices=status_choice,default='process',max_length=150)
+
+
+# OrderItems
+class CartOrderItems(models.Model):
+    order=models.ForeignKey(CartOrder,on_delete=models.CASCADE)
+    invoice_no=models.CharField(max_length=150)
+    item=models.CharField(max_length=150)
+    image=models.CharField(max_length=200)
+    qty=models.IntegerField()
+    price=models.FloatField()
+    total=models.FloatField()
+
+
+    def image_tag(self):
+        return mark_safe('<img src="%s" width="50" height="50" />' % (self.image))
+
+class Wishlist(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    product= models.ForeignKey(Product,on_delete=models.CASCADE)
+    

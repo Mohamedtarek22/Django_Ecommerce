@@ -1,21 +1,29 @@
 
 from django.shortcuts import render
-from django.http import HttpRequest,HttpResponse,HttpResponseRedirect
+from django.http import HttpRequest,HttpResponse,HttpResponseRedirect,JsonResponse
 from django.contrib import messages
 
 # Create your views here.
 from product.models import Comment, CommentForm, Product, Category
+from django.template.loader import render_to_string
 
 
 def index(request):
-    products =Product.objects.all()
+    data=Product.objects.all()
+    # data2 =Product.objects.filter(category_id=id)
     category= Category.objects.all()
     products_slider = Product.objects.all().order_by('id')[:4]
 
-    context ={'products':products,'category':category,'products_slider':products_slider}
+    context ={'data':data,'category':category,'products_slider':products_slider}
     return render(request,'category_products.html',context)
 
+# def filter_data(request):
+#     colors=request.GET.getlist('color[]')
+#     sizes=request.GET.getlist('color[]')
 
+#     allproducts=Product.objects.all()
+#     t= render_to_string('ajax/category_products.html',{'data':allproducts})
+#     return JsonResponse({'data':t})
 
 def addcomment(request,id):
     url = request.META.get('HTTP_REFERER')  # get last url

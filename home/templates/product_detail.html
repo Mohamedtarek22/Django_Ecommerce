@@ -6,6 +6,7 @@
 {% load mptt_tags %}
 {% load static %}
 {% block body %}
+<script type="text/javascript" src="{%static 'js/cart.js' %}"></script>
 <div class="container">
       <div class="row ">
         <div id="column-left" class="col-sm-4 col-md-4 col-lg-3 hidden-xs">
@@ -18,7 +19,7 @@
               </ul>
             </div>
           </div>
-          <div class="left_banner left-sidebar-widget mt_30 mb_40"> <a href="#"><img src="images/left1.jpg" alt="Left Banner" class="img-responsive" /></a> </div>
+          <div class="left_banner left-sidebar-widget mt_30 mb_40"> <a href="#"><img src="{%static ''%}images/left1.jpg" alt="Left Banner" class="img-responsive" /></a> </div>
            <div class="left-special left-sidebar-widget mb_50">
             <div class="heading-part mb_20 ">
               <h2 class="main_title">Top Products</h2>
@@ -52,7 +53,7 @@
         <div class="col-sm-8 col-md-8 col-lg-9 mtb_30">
           <!-- =====  BANNER STRAT  ===== -->
           <div class="breadcrumb ptb_20">
-            <h1>New LCDScreen...</h1>
+            <h1>{{product.title}}</h1>
             <ul>
               <li><a href="/">Home</a></li>
               <li><a href="/category/{{ product.category.id }}/{{ product.category.slug }}">{{ product.category.title }}</a></li>
@@ -83,13 +84,20 @@
                 <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-1x"></i></span>
                 <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i><i class="fa fa-star fa-stack-x"></i></span>
               </div>
-              <span class="price mb_20"><span class="amount"><span class="currencySymbol">EG</span>{{ product.price }}</span>
+              <span class="price mb_20"><span class="amount ">EGP<span class="currencySymbol"></span><span class="product-price-{{product.id}}">{{ product.price }}</span></span>
               </span>
               <hr>
               <ul class="list-unstyled product_info mtb_20">
-
+                <li>
+                  <label>Brand:</label>
+                  <span> <a href="#">{{product.brand}}</a></span></li>
+                <li>
+                  <label>Product Code:</label>
+                  <span> product {{product.id}}</span></li>
+                <li>
+                <li>
                   <label>Availability:</label>
-                  <span> In Stock</span></li>
+                  <span> {{product.status}}</span></li>
               </ul>
               <hr>
               <p class="product-desc mtb_30">{{ product.description }} </p>
@@ -99,18 +107,15 @@
                     <div class="Sort-by col-md-6">
                       <label>Sort by</label>
                       <select name="product_size" id="select-by-size" class="selectpicker form-control">
-                        <option>Small</option>
-                        <option>Medium</option>
-                        <option>Large</option>
+                        <option>{{product.size}}</option>
+                        
                       </select>
                     </div>
                     <div class="Color col-md-6">
                       <label>Color</label>
                       <select name="product_color" id="select-by-color" class="selectpicker form-control">
-                        <option>Blue</option>
-                        <option>Green</option>
-                        <option>Orange</option>
-                        <option>White</option>
+                        <option>{{product.color}}</option>
+                        
                       </select>
                     </div>
                   </div>
@@ -119,10 +124,23 @@
                        {% csrf_token %}
                         <div class="qty mt_30 form-group2">
                           <label>Qty</label>
-                          <input name="quantity" min="1" value="1" type="number" max="{{ product.amount }}">
+                          <input class="product-qty-{{product.id}}" name="quantity" min="1" value="1" type="number" max="{{ product.minamount }}" >
                         </div>
                         <div class="button-group mt_30">
-                          <div ><a href="/order/addtoshopcart/{{ product.id }}"  class="primary-btn add-to-cart"></a></div>
+                          <div >
+                            <input type="hidden" class="product-image-{{product.id}}" value="{{ product.image.url }}"/>
+                            <input type="hidden" class="product-id-{{product.id}}" value="{{product.id}}"/>
+                            <input type="hidden" class="product-title-{{product.id}}" value="{{product.title}}"/>
+
+                            <a  data-index="{{product.id}}" class="primary-btn add-to-cart add-cart" id="addToCartBtn"></a>
+{%if user.is_authenticated%}
+                        <a class="wishlist add-wishlist" data-product="{{rs.id}}"></a>
+                        {%else%}
+                        <a class="wishlist" href="/login"></a>
+
+                        {%endif%}                            <div class="compare"><a href="#"><span>Compare</span></a></div>
+                          </div>
+
                         </div>
                       </form>
               </div>

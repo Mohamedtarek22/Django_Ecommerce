@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from order.models import ShopCart, Order, OrderProduct
+from order.models import CartOrder, CartOrderItems, ShopCart, Order, OrderProduct, Wishlist
 
 
 class ShopCartAdmin(admin.ModelAdmin):
@@ -28,6 +28,17 @@ class OrderProductAdmin(admin.ModelAdmin):
     list_display = ['user', 'product','price','quantity','amount']
     list_filter = ['user']
 
-admin.site.register(ShopCart,ShopCartAdmin)
-admin.site.register(Order,OrderAdmin)
-admin.site.register(OrderProduct,OrderProductAdmin)
+# admin.site.register(ShopCart,ShopCartAdmin)
+# admin.site.register(Order,OrderAdmin)
+# admin.site.register(OrderProduct,OrderProductAdmin)
+
+class CartOrderAdmin(admin.ModelAdmin):
+    list_editable=['paid_status','order_status']
+    list_display = ['user', 'total_amt','paid_status','order_dt','order_status']
+
+admin.site.register(CartOrder,CartOrderAdmin)
+class CartOrderItemsAdmin(admin.ModelAdmin):
+    list_display = ['order', 'invoice_no','item','image_tag','qty','price','total']
+
+admin.site.register(CartOrderItems,CartOrderItemsAdmin)
+

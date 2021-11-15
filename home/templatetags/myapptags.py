@@ -15,3 +15,7 @@ register = template.Library()
 def shopcartcount(userid):
     count = ShopCart.objects.filter(user_id=userid).count()
     return count
+# @register.simple_tag  
+# def shopcartcount2():
+#     count = ShopCart.objects.all().count()
+#     return count

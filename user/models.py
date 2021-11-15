@@ -3,15 +3,15 @@ from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 # Create your models here.
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone = models.CharField(blank=True, max_length=20)
-    address = models.CharField(blank=True, max_length=150)
+    address = models.TextField(blank=True, max_length=150)
     city = models.CharField(blank=True, max_length=20)
     country = models.CharField(blank=True, max_length=50)
     # image = models.ImageField(blank=True, upload_to='images/users/')
     # language = models.ForeignKey(Language, on_delete=models.CASCADE, null=True,blank=True)
     # currency = models.ForeignKey(Currency, on_delete=models.CASCADE, null=True,blank=True)
-
+    status_address=models.BooleanField(default=False)
     def __str__(self):
         return self.user.username
 
@@ -22,3 +22,4 @@ class UserProfile(models.Model):
     #     return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))
     #
     # image_tag.short_description = 'Image'
+

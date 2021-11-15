@@ -3,12 +3,15 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, reques
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.crypto import get_random_string
-
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
-from order.models import ShopCart, ShopCartForm, OrderForm, Order, OrderProduct
+from order.models import CartOrder, CartOrderItems, ShopCart, ShopCartForm, OrderForm, Order, OrderProduct
 from product.models import Category, Product
 from user.models import UserProfile
-
+from paypal.standard.forms import PayPalPaymentsForm
 
 def index(request):
     return HttpResponse("Order Page")
@@ -80,7 +83,7 @@ def orderproduct(request):
     category = Category.objects.all()
     current_user = request.user  # Access User Session information
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
-    profile=UserProfile.objects.get(user_id=current_user.id)
+    profile=UserProfile.objects.filter(user_id=current_user.id)
     total = 0
     for rs in shopcart:
         total += rs.product.price * rs.quantity
@@ -131,3 +134,136 @@ def orderproduct(request):
 
                }
     return render(request, 'Order_Form.html', context)
+
+
+def add_to_cart(request):
+	# del request.session['cartdata']
+	cart_p={}
+	cart_p[str(request.GET['id'])]={
+		'image':request.GET['image'],
+		'title':request.GET['title'],
+		'qty':request.GET['qty'],
+		'price':request.GET['price'],
+	}
+	if 'cartdata' in request.session:
+		if str(request.GET['id']) in request.session['cartdata']:
+			cart_data=request.session['cartdata']
+			cart_data[str(request.GET['id'])]['qty']=int(cart_p[str(request.GET['id'])]['qty'])
+			cart_data.update(cart_data)
+			request.session['cartdata']=cart_data
+		else:
+			cart_data=request.session['cartdata']
+			cart_data.update(cart_p)
+			request.session['cartdata']=cart_data
+	else:
+		request.session['cartdata']=cart_p
+	return JsonResponse({'data':request.session['cartdata'],'totalitems':len(request.session['cartdata'])})
+def cart_list(request):
+    category = Category.objects.all()
+    products_slider=Product.objects.all().order_by('id')[:4]
+    total_amt=0
+    for p_id,item in request.session['cartdata'].items():
+        total_amt+=int(item['qty'])*float(item['price'])
+
+
+    context={
+             'category':category,
+             'products_slider':products_slider,
+             'cart_data':request.session['cartdata'],
+             'totalitems':len(request.session['cartdata'])
+             ,'total_amt':total_amt
+             }
+    return render(request,'shopcart_products.html',context)
+def delete_cart_item(request):
+    p_id=request.GET['id']
+    if 'cartdata' in request.session:
+	    if p_id in request.session['cartdata']:
+		    cart_data=request.session['cartdata']
+		    del request.session['cartdata'][p_id]
+		    request.session['cartdata']=cart_data
+    total_amt=0
+    for p_id,item in request.session['cartdata'].items():
+        total_amt+=int(item['qty'])*float(item['price'])
+
+    t=render_to_string('ajax/shopcart_products.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt})
+    return JsonResponse({'data':t,'totalitems':len(request.session['cartdata'])})
+def update_cart_item(request):
+	p_id=str(request.GET['id'])
+	p_qty=request.GET['qty']
+	if 'cartdata' in request.session:
+		if p_id in request.session['cartdata']:
+			cart_data=request.session['cartdata']
+			cart_data[str(request.GET['id'])]['qty']=p_qty
+			request.session['cartdata']=cart_data
+	total_amt=0
+	for p_id,item in request.session['cartdata'].items():
+		total_amt+=int(item['qty'])*float(item['price'])
+	t=render_to_string('ajax/shopcart_products.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt})
+	return JsonResponse({'data':t,'totalitems':len(request.session['cartdata'])})
+@login_required(login_url='/login') # Check login
+def checkout(request):
+    total_amt=0
+    totalAmt=0
+    if 'cartdata'in request.session:
+        for p_id,item in request.session['cartdata'].items():
+            totalAmt+=int(item['qty'])*float(item['price'])
+    #process
+    # Process Payment
+    # order_id='123'
+    #order
+    order =CartOrder.objects.create(
+        user=request.user,
+        total_amt=totalAmt,
+
+
+    )
+    #end
+    category = Category.objects.all()
+    products_slider=Product.objects.all().order_by('id')[:4]
+    for p_id,item in request.session['cartdata'].items():
+        total_amt+=int(item['qty'])*float(item['price'])
+        #orderitem
+        items=CartOrderItems.objects.create(
+            order=order,
+            invoice_no='INV-'+str(order.id),
+            item=item['title'],
+            image=item['image'],
+            qty=item['qty'],
+            price=item['price'],
+            total=float(item['qty'])*float(item['price'])
+
+
+        )
+    host = request.get_host()
+    paypal_dict = {
+		'business': settings.PAYPAL_RECEIVER_EMAIL,
+		'amount': total_amt,
+		'item_name': 'OrderNo-'+str(order.id),
+		'invoice': 'INV-'+str(order.id),
+		'currency_code': 'EGP',
+		'notify_url': 'http://{}{}'.format(host,reverse('paypal-ipn')),
+		'return_url': 'http://{}{}'.format(host,reverse('payment_done')),
+		'cancel_return': 'http://{}{}'.format(host,reverse('payment_cancelled')),
+		}
+    form = PayPalPaymentsForm(initial=paypal_dict)
+
+    context={
+             'category':category,
+             'products_slider':products_slider,
+             'cart_data':request.session['cartdata'],
+             'totalitems':len(request.session['cartdata'])
+             ,'total_amt':total_amt
+             ,'form':form
+             }
+    
+    return render(request,'Order_Form.html',context)
+
+@csrf_exempt
+def payment_done(request):
+	returnData=request.POST
+	return render(request, 'payment-success.html',{'data':returnData})
+
+
+@csrf_exempt
+def payment_canceled(request):
+	return render(request, 'payment-fail.html')

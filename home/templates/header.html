@@ -1,5 +1,6 @@
 {% load static %}
-
+{% load mptt_tags %}
+{% load mptt_tags %}
 <header id="header">
       <div class="header-top">
         <div class="container">
@@ -24,17 +25,17 @@
             <div class="col-sm-6">
               <ul class="header-top-right text-right">
                   {% if user.id is not None%}
-                <li class="account"><a href="/">{{ user.first_name }}</a></li>
+                <li class="account"><a href="{%url 'my_dashboard'%}">{{ user.first_name }}</a></li>
                       <li class="sitemap"><a href="/logout">Logout</a></li>
                       {% else %}
-                      <li class="account"><a href="/login">My Account</a></li>
+                      <li class="account"><a href="/login">My Account </a></li>
                     {% endif %}
 {#                <li class="sitemap"><a href="#">Sitemap</a></li>#}
-                {% if user.id is not None%}
-                <li class="cart"><a href="/shopcart/">My Cart</a></li>
-                  {% else %}
-                        <li> <a href="/login">My Cart</a></li>
-                   {% endif %}
+                <!-- {% if user.id is not None%}
+                 <li class="cart"><a href="/shopcart/">My Cart</a></li>
+                  {% else %} -->
+                        <!-- <li> <a href="/login">My Cart</a></li> -->
+                   <!-- {% endif %} -->
               </ul>
             </div>
           </div>
@@ -55,22 +56,12 @@
               <button class="navbar-toggle pull-left" type="button" data-toggle="collapse" data-target=".js-navbar-collapse"> <span class="i-bar">
                   <i class="fa fa-bars"></i></span></button>
               <div class="shopping-icon">
-                  {% if user.id is not None%}
                 <div class="cart-item " data-target="#cart-dropdown" data-toggle="collapse" aria-expanded="true" role="button">
-{#                    <a href="/shopcart/"></a>#}
-                        {% load myapptags %}
-                        {% shopcartcount user.id as count %}
-                    <a href="/shopcart/">Item's : <span class="cart-qty">{{count}}</span></a>
+                       
+                    <a href="{%url 'cart'%}">Item's : <span class="cart-qty cart-list">{{request.session.cartdata|length}}</span></a>
 
                 </div>
-                  {% else %}
-                    <div class="cart-item " data-target="#cart-dropdown" data-toggle="collapse" aria-expanded="true" role="button">
-{#                    <a href="/shopcart/"></a>#}
-
-                    <a href="/login">Item's : <span class="cart-qty">0</span></a>
-
-                </div>
-                  {% endif %}
+            
               </div>
               <div class="main-search pull-right">
                 <div class="search-overlay">
@@ -78,7 +69,6 @@
                   <a href="javascript:void(0)" class="search-overlay-close"></a>
                   <!-- End Close Icon -->
                   <script>
-
                               $(function() {
                                 $("#query").autocomplete({
                                   source: "/search_auto/",
@@ -93,8 +83,21 @@
                               {
                                 var selectedObj = ui.item;
                               }
+                              // cart=[]
+                             function addProduct(){
+                                let products = [];
+                                if(localStorage.getItem('products')){
+                                    products = JSON.parse(localStorage.getItem('products'));
+                                }
+                                products.push({'id' : id + 1, image : '<imageLink>'});
+                                localStorage.setItem('products', JSON.stringify(products));
+                                       }
+                                        
+                              
 
-                            </script>
+
+
+                  </script>
                     <div class="container">
                     <!-- Search Form -->
 
@@ -171,7 +174,7 @@
 {#                    </li>#}
 {#                  </ul>#}
                 </li>
-                <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages </a>
+                <!-- <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages </a>
                   <ul class="dropdown-menu">
                     <li> <a href="/contact">Contact us</a></li>
                   {% if user.id is not None%}
@@ -192,8 +195,8 @@
 
 
                   </ul>
-                </li>
-                <li> <a href="/about">About us</a></li>
+                </li> -->
+                <li> <a href="/contact">Contact us</a></li>
               </ul>
             </div>
             <!-- /.nav-collapse -->
@@ -212,19 +215,9 @@
               <div id="category-menu-responsive" class="navbar collapse " aria-expanded="true" style="" role="button">
                 <div class="nav-responsive">
                   <ul class="nav  main-navigation collapse in">
-                    <li><a href="#">Pharmacy</a></li>
-                    <li><a href="#">Health</a></li>
-                    <li><a href="#">Beauty</a></li>
-                    <li><a href="#">Vitamins</a></li>
-                    <li><a href="#">Sweating</a></li>
-                    <li><a href="#">Coughs & Colds</a></li>
-                    <li><a href="#">Hair Loss</a></li>
-                    <li><a href="#">Weight Loss</a></li>
-                    <li><a href="#">Antifungals</a></li>
-                    <li><a href="#">Pain Relief</a></li>
-                    <li><a href="#">Stop Smoking</a></li>
-                    <li><a href="#">Skin Conditions</a></li>
-                    <li><a href="#">Top Brands</a></li>
+                    {% recursetree category %}
+                    <li><a href="/category/{{node.id }}/{{ node.slug }}">{{ node.title }}</a></li>
+                    {% endrecursetree %}
                   </ul>
                 </div>
               </div>

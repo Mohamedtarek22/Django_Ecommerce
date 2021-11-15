@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from order.models import ShopCart
-from product.models import Category, Product, Images,Comment
+from product.models import Brand, Category, Color, Product, Images,Comment, Size
 from mptt.admin import DraggableMPTTAdmin
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -48,13 +48,17 @@ class ProductImageInline(admin.TabularInline):
     extra = 5
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['title','category', 'status','image_tag']
+    list_display = ['title','category', 'image_tag','status']
+    list_editable=['status']
     list_filter = ['category']
     readonly_fields = ('image_tag',)
     inlines = [ProductImageInline]
     prepopulated_fields = {'slug': ('title',)}
-
-admin.site.register(Category,CategoryAdmin2)
+admin.site.register(Category)
+admin.site.register(Brand)
+admin.site.register(Color)
+admin.site.register(Size)
+# admin.site.register(Category,CategoryAdmin2)
 admin.site.register(Product,ProductAdmin)
 admin.site.register(Images)
 
